@@ -1,6 +1,6 @@
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'HospitalEmergencyRoomDB')
     BEGIN
-        PRINT 'DATABASE HospitalEmergencyRoomDB ALREADY CREATED!';
+        PRINT 'DATABASE HospitalEmergencyRoomDB HAS BEEN CREATED!';
     END
 ELSE
     BEGIN
