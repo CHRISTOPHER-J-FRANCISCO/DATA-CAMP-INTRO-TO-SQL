@@ -4,7 +4,7 @@ using System;
 using System.Data.SqlClient;
 
 // you're going to use the database connection singleton
-// you're going to use a class that can be inherited (sealed)
+// you're going to use a class that can't be inherited (sealed)
 public sealed class ServerConnection
 {
 
