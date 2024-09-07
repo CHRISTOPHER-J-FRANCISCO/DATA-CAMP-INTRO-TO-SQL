@@ -5,14 +5,14 @@ using System.Data.SqlClient;
 
 // you're going to use the database connection singleton
 // you're going to use a class that can be inherited (sealed)
-public sealed class ServerConnectionSingleton
+public sealed class ServerConnection
 {
 
     // your're going to use a private constructor
-    private ServerConnectionSingleton() {}
+    private ServerConnection() {}
 
     // you're going to use a static reference
-    private static ServerConnectionSingleton _instance = null;
+    private static ServerConnection _instance = null;
     // you're going to use an object lock to prevent race conditions
     private static readonly object _lock = new object();
 
@@ -20,7 +20,7 @@ public sealed class ServerConnectionSingleton
     private string _connectionString;
 
     // you're going to create a "getter declaration"
-    public static ServerConnectionSingleton Instance
+    public static ServerConnection Instance
     {
         // gets if null
         get
@@ -34,7 +34,7 @@ public sealed class ServerConnectionSingleton
                     if (_instance == null)
                     {
                         // create instance
-                        _instance = new ServerConnectionSingleton();
+                        _instance = new ServerConnection();
                     }
                 }
             }
@@ -80,10 +80,10 @@ public sealed class ServerConnectionSingleton
         // get the environment variable 
         string server = Environment.GetEnvironmentVariable("DB_SERVER");
         // set the connection string based off server environment variable
-        ServerConnectionSingleton.Instance.SetConnectionString(server);
+        ServerConnection.Instance.SetConnectionString(server);
 
         // retrieve connection instance
-        using (var connection = ServerConnectionSingleton.Instance.GetOpenConnection())
+        using (var connection = ServerConnection.Instance.GetOpenConnection())
         {
             // yippy kay yay
             if (connection.State == System.Data.ConnectionState.Open)
