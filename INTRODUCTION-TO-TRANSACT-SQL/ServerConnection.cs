@@ -5,94 +5,97 @@ using System.Data.SqlClient;
 
 // you're going to use the database connection singleton
 // you're going to use a class that can't be inherited (sealed)
-public sealed class ServerConnection
+namespace MicrosoftSQLServer
 {
-
-    // your're going to use a private constructor
-    private ServerConnection() {}
-
-    // you're going to use a static reference
-    private static ServerConnection _instance = null;
-    // you're going to use an object lock to prevent race conditions
-    private static readonly object _lock = new object();
-
-    // you're going to create the connection string
-    private string _connectionString;
-
-    // you're going to create a "getter declaration"
-    public static ServerConnection Instance
+    public sealed class ServerConnection
     {
-        // gets if null
-        get
+
+        // your're going to use a private constructor
+        private ServerConnection() { }
+
+        // you're going to use a static reference
+        private static ServerConnection _instance = null;
+        // you're going to use an object lock to prevent race conditions
+        private static readonly object _lock = new object();
+
+        // you're going to create the connection string
+        private string _connectionString;
+
+        // you're going to create a "getter declaration"
+        public static ServerConnection Instance
         {
-            if (_instance == null)
+            // gets if null
+            get
             {
-                // acquire lock
-                lock (_lock)
+                if (_instance == null)
                 {
-                    // if its still null
-                    if (_instance == null)
+                    // acquire lock
+                    lock (_lock)
                     {
-                        // create instance
-                        _instance = new ServerConnection();
+                        // if its still null
+                        if (_instance == null)
+                        {
+                            // create instance
+                            _instance = new MicrosoftSQLServer.ServerConnection();
+                        }
                     }
                 }
+                // return whats got
+                return _instance;
             }
-            // return whats got
-            return _instance;
-        }
-    }
-
-    // what it says
-    public void SetConnectionString(string server)
-    {
-        _connectionString = string.Format("Server={0};Database=master;Integrated Security=True;", server);
-    
-    }
-
-     // return the open connection
-    public SqlConnection GetOpenConnection()
-    {
-        // is legit connection string
-        if (string.IsNullOrEmpty(_connectionString))
-        {
-            throw new InvalidOperationException("Connection string has not been set.");
         }
 
-        // open connection
-        var connection = new SqlConnection(_connectionString);
-        try
+        // what it says
+        public void SetConnectionString(string server)
         {
-            connection.Open();
-            return connection;
-        }
-        // ditch effort
-        catch
-        {
-            connection.Dispose(); 
-            throw;
-        }
-    }
+            _connectionString = string.Format("Server={0};Database=master;Integrated Security=True;", server);
 
-    // test
-    static void Main(string[] args)
-    {
-        // get the environment variable 
-        string server = Environment.GetEnvironmentVariable("DB_SERVER");
-        // set the connection string based off server environment variable
-        ServerConnection.Instance.SetConnectionString(server);
+        }
 
-        // retrieve connection instance
-        using (var connection = ServerConnection.Instance.GetOpenConnection())
+        // return the open connection
+        public SqlConnection GetOpenConnection()
         {
-            // yippy kay yay
-            if (connection.State == System.Data.ConnectionState.Open)
+            // is legit connection string
+            if (string.IsNullOrEmpty(_connectionString))
             {
-                Console.WriteLine("SUCCESSFUL CONNECTION TO DATABASE!");
+                throw new InvalidOperationException("Connection string has not been set.");
             }
-            else
+
+            // open connection
+            var connection = new SqlConnection(_connectionString);
+            try
             {
-                Console.WriteLine("UNSUCCESSFUL CONNECTION TO DATABASE!");
+                connection.Open();
+                return connection;
+            }
+            // ditch effort
+            catch
+            {
+                connection.Dispose();
+                throw;
+            }
+        }
+
+        // test
+        static void Main(string[] args)
+        {
+            // get the environment variable 
+            string server = Environment.GetEnvironmentVariable("DB_SERVER");
+            // set the connection string based off server environment variable
+            ServerConnection.Instance.SetConnectionString(server);
+
+            // retrieve connection instance
+            using (var connection = ServerConnection.Instance.GetOpenConnection())
+            {
+                // yippy kay yay
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    Console.WriteLine("SUCCESSFUL CONNECTION TO SERVER!");
+                }
+                else
+                {
+                    Console.WriteLine("UNSUCCESSFUL CONNECTION TO SERVER!");
+                }
             }
         }
     }
