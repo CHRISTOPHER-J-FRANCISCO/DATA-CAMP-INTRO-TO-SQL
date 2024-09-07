@@ -76,27 +76,27 @@ namespace MicrosoftSQLServer
             }
         }
 
-        // test
-        static void Main(string[] args)
-        {
-            // get the environment variable 
-            string server = Environment.GetEnvironmentVariable("DB_SERVER");
-            // set the connection string based off server environment variable
-            ServerConnection.Instance.SetConnectionString(server);
+        //test
+        // static void Main(string[] args)
+        // {
+        //     // get the environment variable 
+        //     string server = Environment.GetEnvironmentVariable("DB_SERVER");
+        //     // set the connection string based off server environment variable
+        //     MicrosoftSQLServer.ServerConnection.Instance.SetConnectionString(server);
 
-            // retrieve connection instance
-            using (var connection = ServerConnection.Instance.GetOpenConnection())
-            {
-                // yippy kay yay
-                if (connection.State == System.Data.ConnectionState.Open)
-                {
-                    Console.WriteLine("SUCCESSFUL CONNECTION TO SERVER!");
-                }
-                else
-                {
-                    Console.WriteLine("UNSUCCESSFUL CONNECTION TO SERVER!");
-                }
-            }
-        }
+        //     // retrieve connection instance
+        //     using (var connection = MicrosoftSQLServer.ServerConnection.Instance.GetOpenConnection())
+        //     {
+        //         // yippy kay yay
+        //         if (connection.State == System.Data.ConnectionState.Open)
+        //         {
+        //             Console.WriteLine("SUCCESSFUL CONNECTION TO SERVER!");
+        //         }
+        //         else
+        //         {
+        //             Console.WriteLine("UNSUCCESSFUL CONNECTION TO SERVER!");
+        //         }
+        //     }
+        // }
     }
 }
